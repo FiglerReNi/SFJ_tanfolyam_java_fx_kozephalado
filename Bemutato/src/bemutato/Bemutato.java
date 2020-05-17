@@ -75,7 +75,7 @@ public class Bemutato extends Application {
         pane.getChildren().add(imageView);
         //egy adott elemen belül hová tegyen egy másik elemet
         pane.setAlignment(imageView, Pos.TOP_LEFT);
-        //méretezhetőség -> a ép szélességét kötöm az ablak szélességéhez
+        //méretezhetőség -> a kép szélességét kötöm az ablak szélességéhez
         imageView.fitWidthProperty().bind(pane.widthProperty());
        
         Scene scene2 = new Scene(pane, 600, 400);
