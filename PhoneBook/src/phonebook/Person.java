@@ -15,7 +15,7 @@ public class Person {
         this.email = new SimpleStringProperty("");
     }
     
-    public Person(String fname, String lname, String email){
+    public Person(String lname, String fname, String email){
         this.firstName = new SimpleStringProperty(fname);
         this.lastName = new SimpleStringProperty(lname);
         this.email = new SimpleStringProperty(email);
@@ -34,14 +34,14 @@ public class Person {
     }
     
     public void setLastName(String lname){
-        firstName.set(lname);
+        lastName.set(lname);
     }
 
     public String getEmail() {
         return email.get();
     }
     
-    public void setEmail(String email){
-        firstName.set(email);
+    public void setEmail(String e_mail){
+        email.set(e_mail);
     }
 }

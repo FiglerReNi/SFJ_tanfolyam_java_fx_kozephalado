@@ -6,8 +6,18 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<!--Pane típusok:
+    -Pane: mindegyik őse, egyszerű
+    -BorderPane: 5 területe van, meg tudjuk mondani hogy valami mindig özépen legyen pl ablka méretezésnél
+    -AnchorPane: itt pl mennyire legyen valami vmelyik száltől
+    A viszonyítási pontok mások, a pane a legszabadabb-->
 
-<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="phonebook.ViewController">
+<!--Cella szerkeszthető legyen a táblázatban
+    Két megoldás:
+    grafikus felületen
+    kézzel beírva tableview-hoz editable = true-->
+
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="phonebook.ViewController">
     <children>
         <Label layoutX="247.0" layoutY="4.0" minHeight="16" minWidth="69" text="Telefonkönyv">
          <font>
@@ -25,9 +35,9 @@
                   <Pane id="contactPane" fx:id="contactPane" layoutX="110.0" layoutY="120.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <Pane id="exportPane" fx:id="exportPane" layoutX="10.0" layoutY="10.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TableView id="table" fx:id="table" layoutY="6.0" prefHeight="447.0" prefWidth="442.0">
+                        <TableView id="table" fx:id="table" editable="true" layoutY="6.0" prefHeight="447.0" prefWidth="442.0">
                             <placeholder>
-                                <Label text="Nincs adat"/>
+                                <Label text="Nincs adat" />
                             </placeholder>
                           <columns>                           
                           </columns>
