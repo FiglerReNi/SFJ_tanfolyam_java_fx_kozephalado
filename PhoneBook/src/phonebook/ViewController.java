@@ -243,8 +243,7 @@ public class ViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         setTableData();
         setMenuData();
-        PdfGeneration pdfCreator = new PdfGeneration();
-        pdfCreator.pdfGenerator("fájlnév", "Teszt szöveg");
+        PdfGeneration pdfCreator = new PdfGeneration("filename", "text");
     }
 }
 
