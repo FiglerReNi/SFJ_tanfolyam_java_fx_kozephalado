@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,6 +43,10 @@ public class ViewController implements Initializable {
     Pane contactPane;
     @FXML
     Pane exportPane;
+    @FXML
+    TextField inputExport;
+    @FXML
+    Button exportButton;
 //</editor-fold>
 
     private final String MENU_CONTACTS = "Kontaktok";
@@ -58,7 +63,22 @@ public class ViewController implements Initializable {
                     new Person("Figler", "Renáta", "freni@teszt.hu"),
                     new Person("Figler", "Anikó", "fani@teszt.hu"),
                     new Person("Teszt", "Elek", "teszte@teszt.hu"));
-
+    /*Új contact felvitele gombhoz esemény
+      A viewban is meg kell adni az onActionnál*/
+    @FXML
+    private void addContact(ActionEvent event){
+        String email = inputEmail.getText();
+        //e-mail validálás
+        if(email.length() > 3 && email.contains("@") && email.contains(".")){
+            //a beírt adatokat elmentjük
+        data.add(new Person(inputLastname.getText(), inputFirstname.getText(), email));
+        //ürtjuk a mezőket
+        inputLastname.clear();
+        inputFirstname.clear();
+        inputEmail.clear();
+        }       
+    }
+    
     private void setTableData() {
         /*a szerkesztőben is létrehozhatnánk oszlopokat, de így konfigurálhatóbb*/
         //létrehzunk egy oszlopot
@@ -163,7 +183,7 @@ public class ViewController implements Initializable {
         new ChangeListener() {
             //fogadja a megfigyelt objektumot, a régi és az új értékét
             //amire rákattintottunk az lesz a selectedItem
-                    @Override
+            @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 TreeItem<String> selectedItem = (TreeItem<String>) newValue;
                 String selectedMenu;
@@ -174,11 +194,24 @@ public class ViewController implements Initializable {
                         case MENU_CONTACTS:
                             //a try-catch azért kell hogyha nem lennének almenük, akkor a catch-be futna
                             try {
-                            selectedItem.setExpanded(true);
+                                if(selectedItem.isExpanded()){
+                                    selectedItem.setExpanded(false);
+                                }else{
+                                    selectedItem.setExpanded(true);
+                                }  
                         } catch (Exception ex) {
-
+                            System.out.print(ex);
                         }
-                        break;
+                           break;
+                        case MENU_LIST: 
+                            /*alapból mindig az látszódik ami alul van a szerkeztőben, a hierarchiában*/
+                           contactPane.setVisible(true);
+                           exportPane.setVisible(false);
+                           break;   
+                        case MENU_EXPORT:  
+                           contactPane.setVisible(false);
+                           exportPane.setVisible(true);
+                           break;                        
                         case MENU_EXIT:
                             //program bezárás
                             System.exit(0);
@@ -189,13 +222,36 @@ public class ViewController implements Initializable {
         });
     }
 
+//    private void pdfGeneration(String filename, String text){
+//        //ez maga a pdf file
+//        Document document = new Document();
+//        try{
+//            //üres dokumentum jön létre    //hová mentem
+//            PdfWriter.getInstance(document, new FileOutputStream(filename + ".pdf")); 
+//            //megnyitom az üres doksit
+//            document.open();
+//            //kép a pdf-re -> ehhez létre kell hozni egy Image-t, de a pdf-nél hibát fog adni, mert használtunk már
+//            //egy mási osztályból Imaget-t a nyilaknál, de ide egy másik osztályból kell ->
+//            //vagy teljes útvonalat használunk
+//            //vagy külön osztályba tesszük ezt
+//            com.itextpdf.text.Image image1 = com.itextpdf.text.Image.getInstance(getClass().getResource("/pdfkep.jpeg"));
+//        }catch(Exception e){            
+//        }
+//    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setTableData();
         setMenuData();
+        PdfGeneration pdfCreator = new PdfGeneration();
+        pdfCreator.pdfGenerator("fájlnév", "Teszt szöveg");
     }
 }
 
 
 /*Event handler: eseményezelő, egy akció bekövetkezteor triggerel vmit (vagyis valami történni fog). Ezt elindítja valami -> egy esemény
   Listener: hasonló az előzőhöz, de ez egy változásra figyel folyamatosan és az indítja el*/
+/*PDF generálás segédek:
+   -itext 5.5.5  letöltése //ha olyan programhoz használjuk amiért pénzt kérünk a fizetős változatát kell használni
+   -itextpdf-5.5.5.jar fájl bementése a főkönyvtárba (PhoneBook)
+   -Libraries-> Add Jar -> iválaszt -> hozzáad*/

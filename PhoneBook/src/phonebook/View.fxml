@@ -6,12 +6,12 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <!--Pane típusok:
     -Pane: mindegyik őse, egyszerű
     -BorderPane: 5 területe van, meg tudjuk mondani hogy valami mindig özépen legyen pl ablka méretezésnél
     -AnchorPane: itt pl mennyire legyen valami vmelyik száltől
     A viszonyítási pontok mások, a pane a legszabadabb-->
-
 <!--Cella szerkeszthető legyen a táblázatban
     Két megoldás:
     grafikus felületen
@@ -32,8 +32,22 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane id="contactPane" fx:id="contactPane" layoutX="110.0" layoutY="120.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <Pane id="exportPane" fx:id="exportPane" layoutX="10.0" layoutY="10.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Pane id="exportPane" fx:id="exportPane" layoutX="110.0" layoutY="120.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button id="exportButton" fx:id="exportButton" layoutX="178.0" layoutY="254.0" mnemonicParsing="false" text="PDF mentése" />
+                        <TextField id="inputExport" fx:id="inputExport" layoutX="67.0" layoutY="148.0" prefHeight="25.0" prefWidth="308.0" />
+                        <Label layoutX="144.0" layoutY="36.0" text="Exportálás PDF-be">
+                           <font>
+                              <Font name="Arial" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="193.0" layoutY="118.0" text="Fájl neve:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children></Pane>
+                  <Pane id="contacttPane" fx:id="contactPane" layoutX="10.0" layoutY="10.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <TableView id="table" fx:id="table" editable="true" layoutY="6.0" prefHeight="447.0" prefWidth="442.0">
                             <placeholder>
@@ -48,7 +62,7 @@
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="8.0" layoutY="480.0" prefHeight="17.0" prefWidth="76.0" text="Vezetéknév:" />
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="8.0" layoutY="517.0" prefHeight="17.0" prefWidth="76.0" text="Keresztnév:" />
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="8.0" layoutY="555.0" prefHeight="17.0" prefWidth="76.0" text="Email:" />
-                        <Button id="addNewContactButton" fx:id="addNewContactButton" layoutX="293.0" layoutY="513.0" mnemonicParsing="false" text="Új kontakt hozzáadása" />
+                        <Button id="addNewContactButton" fx:id="addNewContactButton" onAction="#addContact" layoutX="293.0" layoutY="513.0" mnemonicParsing="false" text="Új kontakt hozzáadása" />
                      </children>
                   </Pane>
                </children>
