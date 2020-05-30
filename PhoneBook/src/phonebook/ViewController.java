@@ -47,6 +47,8 @@ public class ViewController implements Initializable {
     TextField inputExport;
     @FXML
     Button exportButton;
+    
+    DB db = new DB();
 //</editor-fold>
 
     private final String MENU_CONTACTS = "Kontaktok";
@@ -60,9 +62,11 @@ public class ViewController implements Initializable {
               Kommunikál az adatbázissal is, amit itt létrehozunk új adatot, az bekerül az adatbázisba is és a tableview-ra is*/
     private final ObservableList<Person> data
             = FXCollections.observableArrayList(
-                    new Person("Figler", "Renáta", "freni@teszt.hu"),
-                    new Person("Figler", "Anikó", "fani@teszt.hu"),
-                    new Person("Teszt", "Elek", "teszte@teszt.hu"));
+                    //amíg nincs táblázatunk ezekkel az adatokkal dolgozunk
+//                    new Person("Figler", "Renáta", "freni@teszt.hu"),
+//                    new Person("Figler", "Anikó", "fani@teszt.hu"),
+//                    new Person("Teszt", "Elek", "teszte@teszt.hu")
+            );
     /*Új contact felvitele gombhoz esemény
       A viewban is meg kell adni az onActionnál*/
     @FXML
@@ -71,12 +75,25 @@ public class ViewController implements Initializable {
         //e-mail validálás
         if(email.length() > 3 && email.contains("@") && email.contains(".")){
             //a beírt adatokat elmentjük
-        data.add(new Person(inputLastname.getText(), inputFirstname.getText(), email));
+        Person newPerson = new Person(inputLastname.getText(), inputFirstname.getText(), email);
+        data.add(newPerson);
+        db.addContact(newPerson);
         //ürtjuk a mezőket
         inputLastname.clear();
         inputFirstname.clear();
         inputEmail.clear();
         }       
+    }
+    
+    @FXML
+    private void exportList(ActionEvent event) {
+        String fileName = inputExport.getText();
+        //kiszedjük a whitespaceket
+        fileName = fileName.replaceAll("\\s+", "");
+        //írt e be a felhasználó file nevet
+        if (fileName != null && !fileName.equals("")) {
+            PdfGeneration pdfCreator = new PdfGeneration(fileName, data);
+        }
     }
     
     private void setTableData() {
@@ -147,6 +164,8 @@ public class ViewController implements Initializable {
           addAll -> hozzáadjuk azokat amiket szeretnénk
          */
         table.getColumns().addAll(lastNameCol, firstNameCol, emailCol);
+        //adatbázisból kivesszük az adatokat
+        data.addAll(db.getAllContacts());
         //Adatok hozzáadása -> observableList kell legyen
         table.setItems(data);
     }
@@ -193,7 +212,7 @@ public class ViewController implements Initializable {
                     switch (selectedMenu) {
                         case MENU_CONTACTS:
                             //a try-catch azért kell hogyha nem lennének almenük, akkor a catch-be futna
-                            try {
+                        try {
                                 if(selectedItem.isExpanded()){
                                     selectedItem.setExpanded(false);
                                 }else{
@@ -243,7 +262,10 @@ public class ViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         setTableData();
         setMenuData();
-        PdfGeneration pdfCreator = new PdfGeneration("filename", "text");
+        
+        //Ez itt nem szerencsés, mert így minden egyes indításkor generálódik pdf, a fájlba írás általában úgy
+        //történik, hogy ha már létezik a fájl akkor felülírja
+//        PdfGeneration pdfCreator = new PdfGeneration("filename", "text");
     }
 }
 
@@ -254,3 +276,5 @@ public class ViewController implements Initializable {
    -itext 5.5.5  letöltése //ha olyan programhoz használjuk amiért pénzt kérünk a fizetős változatát kell használni
    -itextpdf-5.5.5.jar fájl bementése a főkönyvtárba (PhoneBook)
    -Libraries-> Add Jar -> iválaszt -> hozzáad*/
+/*A projet dist mappájában van a .jar file amit használni kell és a lib mappa, hogy más gépeken futtatható legyen a program, ezt kell csak
+  átadni, ilyenkor a pdf-et e mellé a fájl mellé fogja generálni, ha nem állítunk be más lehetőséget.*/

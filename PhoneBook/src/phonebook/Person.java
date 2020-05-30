@@ -8,17 +8,22 @@ public class Person {
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName;
     private final SimpleStringProperty email;
+    private final SimpleStringProperty id;
+
+ 
     
     public Person(){
         this.firstName = new SimpleStringProperty("");
         this.lastName = new SimpleStringProperty("");
         this.email = new SimpleStringProperty("");
+        this.id = new SimpleStringProperty("");
     }
     
     public Person(String lname, String fname, String email){
         this.firstName = new SimpleStringProperty(fname);
         this.lastName = new SimpleStringProperty(lname);
         this.email = new SimpleStringProperty(email);
+        this.id = new SimpleStringProperty("");
     }
 
     public String getFirstName() {
@@ -43,5 +48,13 @@ public class Person {
     
     public void setEmail(String e_mail){
         email.set(e_mail);
+    }
+    
+    public String getId() {
+        return id.get();
+    }
+    
+    public void setId(String azon){
+        id.set(azon);
     }
 }

@@ -34,7 +34,7 @@
                <children>
                   <Pane id="exportPane" fx:id="exportPane" layoutX="110.0" layoutY="120.0" prefHeight="617.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button id="exportButton" fx:id="exportButton" layoutX="178.0" layoutY="254.0" mnemonicParsing="false" text="PDF mentése" />
+                        <Button id="exportButton" fx:id="exportButton"  onAction="#exportList" layoutX="178.0" layoutY="254.0" mnemonicParsing="false" text="PDF mentése" />
                         <TextField id="inputExport" fx:id="inputExport" layoutX="67.0" layoutY="148.0" prefHeight="25.0" prefWidth="308.0" />
                         <Label layoutX="144.0" layoutY="36.0" text="Exportálás PDF-be">
                            <font>
