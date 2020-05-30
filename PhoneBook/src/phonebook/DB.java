@@ -94,7 +94,7 @@ public class DB {
     public void addContact(Person person){
          try {
              //mivel id-t nem akarunk beállítani, mert automatikus, ezért meg kell adni a mezőket amiknek értéket adunk
-            String sql = "insert into contacts (lastname, fristname, email) values(?,?,?)";
+            String sql = "insert into contacts (lastname, firstname, email) values(?,?,?)";
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, person.getLastName());
             pstm.setString(2, person.getFirstName());
