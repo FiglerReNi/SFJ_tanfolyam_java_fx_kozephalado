@@ -26,6 +26,13 @@ public class Person {
         this.id = new SimpleStringProperty("");
     }
 
+     public Person(Integer id, String lname, String fname, String email){
+        this.firstName = new SimpleStringProperty(fname);
+        this.lastName = new SimpleStringProperty(lname);
+        this.email = new SimpleStringProperty(email);
+        this.id = new SimpleStringProperty(String.valueOf(id));
+    }
+     
     public String getFirstName() {
         return firstName.get();
     }

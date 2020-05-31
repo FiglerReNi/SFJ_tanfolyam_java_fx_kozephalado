@@ -16,8 +16,8 @@ public class DB {
     //sampleDB -> adatbázis neve
     //create true -> ha nincs még ilyen létrehozza
     final String URL = "jdbc:derby:sampleDB;create=true";
-    final String USERNAME = "";
-    final String PASSWORD = "";
+    //final String USERNAME = "";
+    //final String PASSWORD = "";
     
     private Connection conn = null;
     private Statement createStatement = null;
@@ -81,7 +81,7 @@ public class DB {
             ResultSet rs = createStatement.executeQuery(sql);
             users = new ArrayList<Person>();
              while (rs.next()) {
-                 Person actualPerson = new Person(rs.getString("lastname"), rs.getString("firstname"), rs.getString("email"));
+                 Person actualPerson = new Person(rs.getInt("id"), rs.getString("lastname"), rs.getString("firstname"), rs.getString("email"));
                  users.add(actualPerson);
              }
         } catch (SQLException ex) {
@@ -108,11 +108,12 @@ public class DB {
     
         public void updateContact(Person person){
          try {
-            String sql = "update contacts set lastname = ?, firstname = ?, email = ? where ";
+            String sql = "update contacts set lastname = ?, firstname = ?, email = ? where id = ?";
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, person.getLastName());
             pstm.setString(2, person.getFirstName());
             pstm.setString(3, person.getEmail());
+            pstm.setInt(4, Integer.parseInt(person.getId()));
             pstm.execute();
         } catch (SQLException ex) {
             System.out.println("Valami baj van a contact hozzáadásakor");

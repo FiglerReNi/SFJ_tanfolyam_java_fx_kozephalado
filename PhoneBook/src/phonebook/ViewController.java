@@ -119,12 +119,13 @@ public class ViewController implements Initializable {
             Az event olyan objektum ami tartalmazni fogja a régi és az új értéket is, de ezt csak a handle functionon belül 
             látjuk, utána már nem lesz elérhető, célszerú ha adatbázis oldalon gondoskodunk arról, hogy az előző adat meg-
             maradjon, ha fontos */
-        lastNameCol.setOnEditCommit(
+      lastNameCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setLastName(t.getNewValue());
+                Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                actualPerson.setLastName(t.getNewValue());
+                db.updateContact(actualPerson);
             }
         }
         );
@@ -138,8 +139,9 @@ public class ViewController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setFirstName(t.getNewValue());
+                Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                actualPerson.setFirstName(t.getNewValue());
+                   db.updateContact(actualPerson);
             }
         }
         );
@@ -153,8 +155,9 @@ public class ViewController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setEmail(t.getNewValue());
+                Person actualPerson = (Person) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                actualPerson.setEmail(t.getNewValue());
+                db.updateContact(actualPerson);
             }
         }
         );
@@ -262,7 +265,6 @@ public class ViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         setTableData();
         setMenuData();
-        
         //Ez itt nem szerencsés, mert így minden egyes indításkor generálódik pdf, a fájlba írás általában úgy
         //történik, hogy ha már létezik a fájl akkor felülírja
 //        PdfGeneration pdfCreator = new PdfGeneration("filename", "text");
