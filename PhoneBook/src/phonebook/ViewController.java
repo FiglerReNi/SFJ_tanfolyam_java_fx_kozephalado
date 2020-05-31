@@ -10,8 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -21,8 +25,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class ViewController implements Initializable {
 
@@ -47,6 +54,10 @@ public class ViewController implements Initializable {
     TextField inputExport;
     @FXML
     Button exportButton;
+    @FXML
+    AnchorPane anchor;  
+    @FXML
+    SplitPane mainSplit; 
     
     DB db = new DB();
 //</editor-fold>
@@ -82,7 +93,9 @@ public class ViewController implements Initializable {
         inputLastname.clear();
         inputFirstname.clear();
         inputEmail.clear();
-        }       
+        }else{
+            alert("Adj meg egy valódi e-mail címet!");
+        }   
     }
     
     @FXML
@@ -93,7 +106,41 @@ public class ViewController implements Initializable {
         //írt e be a felhasználó file nevet
         if (fileName != null && !fileName.equals("")) {
             PdfGeneration pdfCreator = new PdfGeneration(fileName, data);
+        }else{
+            alert("Adj meg egy file nevet!");
         }
+    }
+    
+    public void alert(String text){
+        //letiltjuk a főablakot
+        mainSplit.setDisable(true);
+        //láthatóságot visszavesszük
+        mainSplit.setOpacity(0.4);
+        //popup létrehozása
+        //kiírandó szöveg
+        Label label = new Label(text);
+        //ok gomb
+        Button alertButton = new Button("OK");
+        //maga az ablak (vertikális box)
+        //egymás alá beteszi az átadott elemeket
+        VBox vbox = new VBox(label, alertButton);
+        //középre zárt
+        vbox.setAlignment(Pos.CENTER);
+        //gomb működése
+        alertButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                //visszaállítjuk a láthatóságát a programnak
+                mainSplit.setDisable(false);
+                mainSplit.setOpacity(1);
+                vbox.setVisible(false);
+            }
+        });
+        //hozzákötjük a programunkhoz a vboxot -> az anchorhoz adjuk
+        anchor.getChildren().add(vbox);
+        //ha nem pozicionáljuk bal felül jelenik meg, ezért megmondjuk, hogy mennyire legyen a felső és bal széltól
+        anchor.setTopAnchor(vbox, 300.0);
+        anchor.setLeftAnchor(vbox, 250.0);
     }
     
     private void setTableData() {
@@ -101,7 +148,7 @@ public class ViewController implements Initializable {
         //létrehzunk egy oszlopot
         TableColumn lastNameCol = new TableColumn("Vezetéknév");
         //sose legyen kisebb mint 100
-        lastNameCol.setMinWidth(100);
+        lastNameCol.setMinWidth(130);
         //beállítjuk hozzá a cella típusát, sokféle cellát létre lehet hozni egy adott oszlophoz (pl textfield, label stb)
         lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         //érték beállítás, mi jelenjen meg benne adatként--> beállítom az értéket, amiben egy Pojo-t adok át, 
@@ -131,7 +178,7 @@ public class ViewController implements Initializable {
         );
 
         TableColumn firstNameCol = new TableColumn("Keresztnév");
-        firstNameCol.setMinWidth(100);
+        firstNameCol.setMinWidth(130);
         firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         firstNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
 
@@ -147,7 +194,7 @@ public class ViewController implements Initializable {
         );
 
         TableColumn emailCol = new TableColumn("Email");
-        emailCol.setMinWidth(200);
+        emailCol.setMinWidth(250);
         emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
         emailCol.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
 
@@ -162,11 +209,41 @@ public class ViewController implements Initializable {
         }
         );
 
-        //összeötjük az oszlopainkat a tableView-val ->
-        /*getColumns() -> érjük az összes oszlopát, ami jelenleg még nincs
+        TableColumn removeCol = new TableColumn("Törlés");
+        removeCol.setMinWidth(100);
+        
+        Callback<TableColumn<Person, String>, TableCell<Person, String>> cellFactory =
+                new Callback<TableColumn<Person, String>, TableCell<Person, String>>(){
+        @Override
+        public TableCell call(final TableColumn<Person, String> param){
+            final TableCell<Person, String> cell = new TableCell<Person, String>(){
+                final Button btn = new Button("Törlés");
+                @Override
+                public void updateItem(String item, boolean empty){
+                    super.updateItem(item, empty);
+                    if(empty){
+                        setGraphic(null);
+                        setText(null);
+                    }else{
+                        btn.setOnAction((event) -> {
+                            Person person = getTableView().getItems().get(getIndex());
+                            data.remove(person);
+                            db.removeContact(person);
+                        });
+                        setGraphic(btn);
+                        setText(null);
+                    }
+                }
+            };
+            return cell;
+        }       
+    };
+    removeCol.setCellFactory(cellFactory);
+        //összekötjük az oszlopainkat a tableView-val ->
+        /*getColumns() -> kérjük az összes oszlopát, ami jelenleg még nincs
           addAll -> hozzáadjuk azokat amiket szeretnénk
          */
-        table.getColumns().addAll(lastNameCol, firstNameCol, emailCol);
+        table.getColumns().addAll(lastNameCol, firstNameCol, emailCol, removeCol);
         //adatbázisból kivesszük az adatokat
         data.addAll(db.getAllContacts());
         //Adatok hozzáadása -> observableList kell legyen

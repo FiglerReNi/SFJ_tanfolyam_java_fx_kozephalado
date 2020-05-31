@@ -106,8 +106,8 @@ public class DB {
         }
     }
     
-        public void updateContact(Person person){
-         try {
+    public void updateContact(Person person) {
+        try {
             String sql = "update contacts set lastname = ?, firstname = ?, email = ? where id = ?";
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, person.getLastName());
@@ -116,7 +116,19 @@ public class DB {
             pstm.setInt(4, Integer.parseInt(person.getId()));
             pstm.execute();
         } catch (SQLException ex) {
-            System.out.println("Valami baj van a contact hozzáadásakor");
+            System.out.println("Valami baj van a contact frissítéseor");
+            System.out.println("" + ex);
+        }
+    }
+
+    public void removeContact(Person person) {
+        try {
+            String sql = "delete from contacts where id = ?";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, Integer.parseInt(person.getId()));
+            pstm.execute();
+        } catch (SQLException ex) {
+            System.out.println("Valami baj van a contact törlésekor");
             System.out.println("" + ex);
         }
     }
