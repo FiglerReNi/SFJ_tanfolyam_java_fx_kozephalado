@@ -1,0 +1,26 @@
+PDF generálás:
+  PDF generálás:
+  	•    itext 5.5.5  letöltése //ha olyan programhoz használjuk amiért pénzt kérünk a fizetős változatát kell használni
+  Telepítése (keretrendszer használata nélkül):
+  	1.    itextpdf-5.5.5.jar fájl bementése a a projekt gyökérkönyvtárába
+  	2.    Libraries-> Add Jar -> választ -> hozzáad
+  Kész projektben (keretrendszer használata nélkül):
+  	• A projekt dist mappájában van a  .jar file (ez a futtatható program) amit használni kell és a lib mappa a pdf beépülővel.
+  	• A .jar + a lib mappával tudjuk futtatni az alkalmazást minden gépen amin van java telepítve
+  	•  Ilyenkor a pdf-et e mellé a fájl mellé fogja generálni, ha nem állítunk be más lehetőséget.
+
+Listener:
+  	• Hasonló az eseménykezelőhöz, de ez folyamatosan figyel egy változásra
+  	• A változás bekövetkezése indítja el.
+  	• A változás triggerel valamit
+  	• Pl. egy toggle, ahol nem egy eseményre figyelünk hanem egy kétállású dolog oda-vissza változására
+
+Event handler:
+  https://stackoverflow.com/questions/4725241/whats-the-difference-between-event-listeners-handlers-in-java
+  Eseményezelő:
+  	• Egy akció bekövetkeztekor triggerel vmit (vagyis valami történni fog). Képes figyelni egy előre meghatározott dologra
+  	• Megtörténik valami -> ez triggerel valamit
+  	• Ezt elindítja valami -> egy esemény
+  	• Tartalmazza a régi és az új értékeket is és egy csomó adatot amit fel tudunk használni az eseményről
+
+
